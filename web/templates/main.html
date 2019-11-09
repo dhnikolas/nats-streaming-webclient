@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        textarea{
+            resize: none;
+            width: 100%;
+            height: 500px;
+        }
+        .console div{
+            display: inline-block;
+            vertical-align: top;
+        }
+        .fields {
+            width: 40%;
+        }
+        .display-out {
+            width: 50%;
+        }
+        .message-field{
+            width: 90%;
+            height: 550px;
+        }
+    </style>
+</head>
+<body>
+<h1>NATS-streaming web client</h1>
+<div class="console">
+    <div class="fields">
+        <label>
+            Host connection:
+            <input id="host-field" type="text" value="localhost:4222">
+        </label><br>
+        <label>
+            Cluster name:
+            <input id="cluster-field" type="text" value="test-cluster">
+        </label><br>
+        <label>
+            Queue name:
+            <input id="queue-field" type="text">
+        </label><br>
+        <div class="message-field">
+           <label for="message"></label><textarea id="message" cols="30" rows="10"></textarea>
+        </div>
+        <br>
+        <button type="button" onclick="loadDoc()">Request data</button>
+    </div>
+
+    <div class="display-out">
+        <label for="output">Output:</label><textarea disabled id="output" cols="30" rows="10"></textarea>
+    </div>
+</div>
+
+
+</body>
+<script>
+    function loadDoc() {
+
+        var http = new XMLHttpRequest();
+        var url = '/send/';
+        var hostName = document.getElementById("host-field").value;
+        var clusterName = document.getElementById("cluster-field").value;
+        var queueName = document.getElementById("queue-field").value;
+        var messageBody = document.getElementById("message").value;
+
+        var emptyField = "";
+        switch (true) {
+            case hostName.length < 1:
+                emptyField = "Host connection";
+                break;
+            case clusterName.length < 1:
+                emptyField = "Cluster name";
+                break;
+            case queueName.length <1:
+                emptyField = "Queue name";
+                break;
+            case messageBody.length < 1:
+                emptyField = "Message";
+                break;
+        }
+
+        if (emptyField.length > 0) {
+            alert("Empty field - " + emptyField);
+            return
+        }
+
+        var params = JSON.stringify({
+            host: hostName,
+            cluster: clusterName,
+            queue: queueName,
+            message: messageBody
+        });
+        http.open('POST', url, true);
+
+        http.setRequestHeader('Content-Type', 'application/json');
+
+        http.onreadystatechange = function() {//Call a function when the state changes.
+            if(http.readyState === 4 && http.status === 200) {
+                var output = document.getElementById("output");
+                output.innerHTML = http.responseText;
+
+            }
+        };
+        http.send(params);
+    }
+</script>
+</html>

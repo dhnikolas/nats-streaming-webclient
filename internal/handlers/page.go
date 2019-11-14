@@ -14,8 +14,7 @@ func Start() {
 	http.HandleFunc("/", handler)
 	http.HandleFunc("/send/", send)
 
-	log.Fatal(http.ListenAndServe(":8011", nil))
-
+	log.Fatal(http.ListenAndServe(":8224", nil))
 }
 
 type SendRequest struct {

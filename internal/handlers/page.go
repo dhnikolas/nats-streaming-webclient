@@ -10,11 +10,13 @@ import (
 	"net/http"
 )
 
-func Start() {
+
+
+func Start(port string) {
 	http.HandleFunc("/", handler)
 	http.HandleFunc("/send/", send)
-
-	log.Fatal(http.ListenAndServe(":8224", nil))
+	fmt.Println("Start listening port " + port)
+	log.Fatal(http.ListenAndServe(":" + port, nil))
 }
 
 type SendRequest struct {

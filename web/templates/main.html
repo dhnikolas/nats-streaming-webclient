@@ -65,6 +65,11 @@
         var queueName = document.getElementById("queue-field").value;
         var messageBody = document.getElementById("message").value;
 
+        var path = location.pathname;
+        if (path.charAt(0) == "/") path = path.substr(1);
+        if (path.charAt(path.length - 1) == "/") path = path.substr(0, path.length - 1);
+
+
         var emptyField = "";
         switch (true) {
             case hostName.length < 1:
@@ -92,7 +97,7 @@
             queue: queueName,
             message: messageBody
         });
-        http.open('POST', url, true);
+        http.open('POST', path + url, true);
 
         http.setRequestHeader('Content-Type', 'application/json');
 

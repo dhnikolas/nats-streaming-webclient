@@ -97,7 +97,7 @@
             queue: queueName,
             message: messageBody
         });
-        http.open('POST', path + url, true);
+        http.open('POST', "/" + path + url, true);
 
         http.setRequestHeader('Content-Type', 'application/json');
 
